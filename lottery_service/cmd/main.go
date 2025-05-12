@@ -16,28 +16,23 @@ import (
 )
 
 func main() {
-	// DB
 	db, err := config.InitDB()
 	if err != nil {
 		log.Fatalf("failed to connect db: %v", err)
 	}
 	repo := postgres.NewLotteryRepository(db)
 
-	// NATS
 	nc, err := nats.Connect(nats.DefaultURL)
 	if err != nil {
 		log.Fatalf("failed to connect to NATS: %v", err)
 	}
 	defer nc.Close()
 
-	// Usecase
 	publisher := natspub.NewPublisher(nc)
 	uc := usecase.NewLotteryUsecase(repo, publisher)
 
-	// Подписка на события
 	natsconsumer.SubscribeToTicketBought(nc, uc)
 
-	// gRPC
 	handler := grpcserver.NewLotteryHandler(uc)
 	server := grpc.NewServer()
 	lotterypb.RegisterLotteryServiceServer(server, handler)
