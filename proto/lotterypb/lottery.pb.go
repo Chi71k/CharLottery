@@ -22,14 +22,15 @@ const (
 )
 
 type Lottery struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Prize         string                 `protobuf:"bytes,4,opt,name=prize,proto3" json:"prize,omitempty"`
-	Status        string                 `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"` // e.g., "open", "closed"
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Id               int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Title            string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Description      string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	Prize            string                 `protobuf:"bytes,4,opt,name=prize,proto3" json:"prize,omitempty"`
+	Status           string                 `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"`
+	AvailableTickets int64                  `protobuf:"varint,6,opt,name=available_tickets,json=availableTickets,proto3" json:"available_tickets,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *Lottery) Reset() {
@@ -97,13 +98,21 @@ func (x *Lottery) GetStatus() string {
 	return ""
 }
 
+func (x *Lottery) GetAvailableTickets() int64 {
+	if x != nil {
+		return x.AvailableTickets
+	}
+	return 0
+}
+
 type CreateLotteryRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Title         string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
-	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
-	Prize         string                 `protobuf:"bytes,3,opt,name=prize,proto3" json:"prize,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	Title            string                 `protobuf:"bytes,1,opt,name=title,proto3" json:"title,omitempty"`
+	Description      string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Prize            string                 `protobuf:"bytes,3,opt,name=prize,proto3" json:"prize,omitempty"`
+	AvailableTickets int64                  `protobuf:"varint,4,opt,name=available_tickets,json=availableTickets,proto3" json:"available_tickets,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *CreateLotteryRequest) Reset() {
@@ -155,6 +164,13 @@ func (x *CreateLotteryRequest) GetPrize() string {
 		return x.Prize
 	}
 	return ""
+}
+
+func (x *CreateLotteryRequest) GetAvailableTickets() int64 {
+	if x != nil {
+		return x.AvailableTickets
+	}
+	return 0
 }
 
 type CreateLotteryResponse struct {
@@ -373,17 +389,19 @@ var File_lottery_proto protoreflect.FileDescriptor
 
 const file_lottery_proto_rawDesc = "" +
 	"\n" +
-	"\rlottery.proto\x12\tlotterypb\"\x7f\n" +
+	"\rlottery.proto\x12\tlotterypb\"\xac\x01\n" +
 	"\aLottery\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x14\n" +
 	"\x05prize\x18\x04 \x01(\tR\x05prize\x12\x16\n" +
-	"\x06status\x18\x05 \x01(\tR\x06status\"d\n" +
+	"\x06status\x18\x05 \x01(\tR\x06status\x12+\n" +
+	"\x11available_tickets\x18\x06 \x01(\x03R\x10availableTickets\"\x91\x01\n" +
 	"\x14CreateLotteryRequest\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x14\n" +
-	"\x05prize\x18\x03 \x01(\tR\x05prize\"E\n" +
+	"\x05prize\x18\x03 \x01(\tR\x05prize\x12+\n" +
+	"\x11available_tickets\x18\x04 \x01(\x03R\x10availableTickets\"E\n" +
 	"\x15CreateLotteryResponse\x12,\n" +
 	"\alottery\x18\x01 \x01(\v2\x12.lotterypb.LotteryR\alottery\"#\n" +
 	"\x11GetLotteryRequest\x12\x0e\n" +

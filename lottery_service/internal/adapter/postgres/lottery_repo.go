@@ -32,3 +32,8 @@ func (r *LotteryRepository) ListLotteries() ([]model.Lottery, error) {
 	}
 	return lotteries, nil
 }
+
+func (r *LotteryRepository) DecreaseAvailableTickets(id int64) error {
+	return r.db.Model(&model.Lottery{}).Where("id = ? AND available_tickets > 0", id).
+		UpdateColumn("available_tickets", gorm.Expr("available_tickets - 1")).Error
+}

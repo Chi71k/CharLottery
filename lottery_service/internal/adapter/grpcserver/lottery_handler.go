@@ -19,21 +19,23 @@ func NewLotteryHandler(uc *usecase.LotteryUsecase) *LotteryHandler {
 
 func (h *LotteryHandler) CreateLottery(ctx context.Context, req *lotterypb.CreateLotteryRequest) (*lotterypb.CreateLotteryResponse, error) {
 	lottery := &model.Lottery{
-		Title:       req.GetTitle(),
-		Description: req.GetDescription(),
-		Prize:       req.GetPrize(),
-		Status:      "open",
+		Title:            req.GetTitle(),
+		Description:      req.GetDescription(),
+		Prize:            req.GetPrize(),
+		Status:           "open",
+		AvailableTickets: req.GetAvailableTickets(),
 	}
 	if err := h.usecase.CreateLottery(lottery); err != nil {
 		return nil, err
 	}
 	return &lotterypb.CreateLotteryResponse{
 		Lottery: &lotterypb.Lottery{
-			Id:          lottery.ID,
-			Title:       lottery.Title,
-			Description: lottery.Description,
-			Prize:       lottery.Prize,
-			Status:      lottery.Status,
+			Id:               lottery.ID,
+			Title:            lottery.Title,
+			Description:      lottery.Description,
+			Prize:            lottery.Prize,
+			Status:           lottery.Status,
+			AvailableTickets: lottery.AvailableTickets,
 		},
 	}, nil
 }
@@ -45,11 +47,12 @@ func (h *LotteryHandler) GetLottery(ctx context.Context, req *lotterypb.GetLotte
 	}
 	return &lotterypb.GetLotteryResponse{
 		Lottery: &lotterypb.Lottery{
-			Id:          lottery.ID,
-			Title:       lottery.Title,
-			Description: lottery.Description,
-			Prize:       lottery.Prize,
-			Status:      lottery.Status,
+			Id:               lottery.ID,
+			Title:            lottery.Title,
+			Description:      lottery.Description,
+			Prize:            lottery.Prize,
+			Status:           lottery.Status,
+			AvailableTickets: lottery.AvailableTickets,
 		},
 	}, nil
 }
@@ -62,11 +65,12 @@ func (h *LotteryHandler) ListLotteries(ctx context.Context, req *lotterypb.ListL
 	var result []*lotterypb.Lottery
 	for _, l := range lotteries {
 		result = append(result, &lotterypb.Lottery{
-			Id:          l.ID,
-			Title:       l.Title,
-			Description: l.Description,
-			Prize:       l.Prize,
-			Status:      l.Status,
+			Id:               l.ID,
+			Title:            l.Title,
+			Description:      l.Description,
+			Prize:            l.Prize,
+			Status:           l.Status,
+			AvailableTickets: l.AvailableTickets,
 		})
 	}
 	return &lotterypb.ListLotteriesResponse{Lotteries: result}, nil

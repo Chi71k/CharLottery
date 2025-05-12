@@ -15,13 +15,15 @@ message Lottery {
   string title = 2;
   string description = 3;
   string prize = 4;
-  string status = 5; // e.g., "open", "closed"
+  string status = 5;
+  int64 available_tickets = 6;
 }
 
 message CreateLotteryRequest {
   string title = 1;
   string description = 2;
   string prize = 3;
+  int64 available_tickets = 4;
 }
 
 message CreateLotteryResponse {
