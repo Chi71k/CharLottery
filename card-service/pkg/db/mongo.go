@@ -19,7 +19,7 @@ func InitMongoDB() {
     defer cancel()
 
     var err error
-    clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
+    clientOptions := options.Client().ApplyURI("mongodb://mongo:27017")
     client, err = mongo.Connect(ctx, clientOptions)
     if err != nil {
         log.Fatalf("Failed to connect to MongoDB: %v", err)

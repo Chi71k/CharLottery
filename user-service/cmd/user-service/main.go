@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	pb "user-service/pkg/api"
+	"user-service/pkg/cache"
 	"user-service/pkg/db"
 	"user-service/pkg/handlers"
 	"user-service/pkg/natswrap" // Импортируй абстракцию!
@@ -15,17 +16,18 @@ import (
 
 func main() {
 	// Инициализация MongoDB
-	db.InitMongo("mongodb://localhost:27017")
+	db.InitMongo("mongodb://mongo:27017")
+	redisClient := cache.NewRedisClient("redis:6379")
 
 	// Подключение к NATS через абстракцию
-	natsClient, err := natswrap.NewNatsClient("nats://localhost:4222")
+	natsClient, err := natswrap.NewNatsClient("nats://nats:4222")
 	if err != nil {
 		log.Fatalf("Ошибка при подключении к NATS: %v", err)
 	}
 
 	// Создаем репозиторий и сервис
 	repo := repository.NewUserRepository(db.MongoClient)
-	userService := service.NewUserService(repo, natsClient) // Передаем абстракцию!
+	userService := service.NewUserService(repo, natsClient, redisClient) // Передаем абстракцию!
 
 	// Инициализируем gRPC сервер
 	grpcServer := grpc.NewServer()
