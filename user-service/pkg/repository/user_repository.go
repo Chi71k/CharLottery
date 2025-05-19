@@ -12,6 +12,19 @@ type UserRepository struct {
 	collection *mongo.Collection
 }
 
+
+type UserRepositoryInterface interface {
+	UserExists(username string) bool
+	CreateUser(user *model.User) error
+	GetUserByID(userID string) (*model.User, error)
+	GetUserByUsername(username string) (*model.User, error)
+	GetUserByEmail(email string) (*model.User, error)
+	UpdatePassword(userID, newPassword string) error
+	GetAllUsers() ([]model.User, error)
+	UpdateUser(userID, username, email string) error
+	DeleteUser(userID string) error
+}
+
 func NewUserRepository(client *mongo.Client) *UserRepository {
 	collection := client.Database("userdb").Collection("users")
 	return &UserRepository{collection: collection}

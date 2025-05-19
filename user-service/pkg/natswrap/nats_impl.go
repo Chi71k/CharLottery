@@ -6,6 +6,7 @@ type NatsClient struct {
     conn *nats.Conn
 }
 
+
 func NewNatsClient(url string) (*NatsClient, error) {
     nc, err := nats.Connect(url)
     if err != nil {

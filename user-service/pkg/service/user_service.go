@@ -17,20 +17,21 @@ import (
 )
 
 type UserService struct {
-	Repo  *repository.UserRepository
-	otps  map[string]string
-	nats  natswrap.Publisher
-	cache *cache.RedisClient
+    Repo  repository.UserRepositoryInterface
+    otps  map[string]string
+    nats  natswrap.Publisher
+    cache cache.CacheInterface
 }
 
-func NewUserService(repo *repository.UserRepository, nats natswrap.Publisher, cache *cache.RedisClient) *UserService {
-	return &UserService{
-		Repo:  repo,
-		otps:  make(map[string]string),
-		nats:  nats,
-		cache: cache, // передаём Redis клиент
-	}
+func NewUserService(repo repository.UserRepositoryInterface, nats natswrap.Publisher, cache cache.CacheInterface) *UserService {
+    return &UserService{
+        Repo:  repo,
+        otps:  make(map[string]string),
+        nats:  nats,
+        cache: cache,
+    }
 }
+
 
 func (us *UserService) Register(username, password, email string) (string, error) {
 	log.Printf("➡️ Register called with: username=%s, email=%s", username, email)
@@ -175,7 +176,7 @@ func (us *UserService) ResetPassword(email, otpCode, newPassword string) error {
 func (us *UserService) GetUser(userID string) (*model.User, error) {
 	log.Printf("➡️ Получение пользователя по ID: %s", userID)
 
-	// Попробуем получить пользователя из Redis-кэша
+	// Попытка получить пользователя из Redis
 	cached, err := us.cache.Get(userID)
 	if err == nil && cached != "" {
 		var user model.User
@@ -185,31 +186,32 @@ func (us *UserService) GetUser(userID string) (*model.User, error) {
 		} else {
 			log.Printf("⚠️ Ошибка при десериализации пользователя из Redis: %v", err)
 		}
+	} else {
+		log.Printf("ℹ️ Пользователь не найден в Redis или ошибка Redis: %v", err)
 	}
 
-	// Если в Redis ничего нет — достаём из БД
+	// Если нет в кэше — получаем из БД
 	user, err := us.Repo.GetUserByID(userID)
 	if err != nil {
 		log.Printf("❌ Пользователь не найден в БД: %s", userID)
 		return nil, err
 	}
 
-	// Сохраняем пользователя в Redis на будущее
+	// Сериализация пользователя в JSON
 	userJSON, err := json.Marshal(user)
 	if err != nil {
 		log.Printf("⚠️ Ошибка при сериализации пользователя: %v", err)
 		return nil, err
 	}
 
-	// Сохраняем в Redis с TTL 5 минут
+	// Сохранение в Redis с TTL 5 минут
 	if err := us.cache.Set(userID, string(userJSON), 5*time.Minute); err != nil {
-		log.Printf("⚠️ Не удалось сохранить пользователя в Redis: %v", err)
-		return nil, err
+		log.Printf("⚠️ Ошибка при сохранении пользователя в Redis: %v", err)
 	}
 
-	log.Printf("✅ Пользователь получен из БД и сохранён в Redis: %s", userID)
 	return user, nil
 }
+
 
 
 func (us *UserService) UpdateUser(userID, username, email string) error {

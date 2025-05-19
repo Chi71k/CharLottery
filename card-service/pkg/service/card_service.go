@@ -22,11 +22,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type Redis interface {
+	Get(key string) (string, error)
+	Set(key string, value string, ttl time.Duration) error
+	Del(key string) error
+}
+
 type CardServiceServer struct {
 	pb.UnimplementedCardServiceServer
 	natsPub natswrap.Publisher
 	natsSub natswrap.Subscriber
-	cache   *cache.RedisClient // Верное имя и тип
+	cache   Redis // Верное имя и тип
 }
 
 func NewCardServiceServer(pub natswrap.Publisher, sub natswrap.Subscriber, redisClient *cache.RedisClient) *CardServiceServer {

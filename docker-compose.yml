@@ -54,7 +54,7 @@ services:
       context: ./card-service
     container_name: card-service
     ports:
-      - "50052:50052"
+      - "50054:50052"
     depends_on:
       - mongo
       - redis

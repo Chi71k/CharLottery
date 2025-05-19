@@ -6,6 +6,12 @@ import (
 
     "github.com/go-redis/redis/v8"
 )
+type CacheInterface interface {
+    Get(key string) (string, error)
+    Set(key, value string, ttl time.Duration) error
+    Del(key string) error
+}
+
 
 type RedisClient struct {
     client *redis.Client

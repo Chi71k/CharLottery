@@ -27,10 +27,27 @@ func (c *Card) Validate() error {
         return errors.New("invalid expiry date format, expected MM/YY")
     }
 
-    exp, err := time.Parse("01/06", c.ExpiryDate)
-    if err != nil || exp.Before(time.Now()) {
+    // разбиваем на месяц и год
+    parts := regexp.MustCompile(`/`).Split(c.ExpiryDate, -1)
+    if len(parts) != 2 {
+        return errors.New("invalid expiry date")
+    }
+
+    month := parts[0]
+    year := parts[1]
+
+    // добавляем префикс "20" к году (если YY < 50 — можно усложнить логику при необходимости)
+    expiryTime, err := time.Parse("01/2006", month+"/20"+year)
+    if err != nil {
+        return errors.New("invalid expiry date")
+    }
+
+    // карта считается действительной до конца месяца
+    endOfMonth := time.Date(expiryTime.Year(), expiryTime.Month()+1, 0, 23, 59, 59, 0, time.UTC)
+    if time.Now().After(endOfMonth) {
         return errors.New("card is expired")
     }
 
     return nil
 }
+
