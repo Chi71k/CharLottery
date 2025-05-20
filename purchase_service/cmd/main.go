@@ -15,28 +15,24 @@ import (
 )
 
 func main() {
-	// Подключение к базе данных
 	db, err := config.InitDB()
 	if err != nil {
 		log.Fatalf("Error initializing database: %v", err)
 	}
 	repo := postgres.NewPurchaseRepository(db)
 
-	// Подключение к NATS
 	nc, err := nats.Connect(nats.DefaultURL)
 	if err != nil {
 		log.Fatalf("Error connecting to NATS: %v", err)
 	}
 	defer nc.Close()
 
-	// Usecase + publisher
 	pub := natsconsumer.NewPublisher(nc)
-	uc := usecase.NewPurchaseUsecase(repo, pub)
+	rdb := config.InitRedis()
+	uc := usecase.NewPurchaseUsecase(repo, pub, db, rdb)
 
-	// Подписка на события создания лотереи
 	natsconsumer.SubscribeToLotteryCreated(nc, uc)
 
-	// Запуск gRPC сервера
 	lis, err := net.Listen("tcp", ":50055")
 	if err != nil {
 		log.Fatalf("Error listening on port 50055: %v", err)

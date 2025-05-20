@@ -4,21 +4,60 @@ package purchasepb;
 
 option go_package = "github.com/CharLottery/proto/purchasepb;purchasepb";
 
-service PurchaseService {
-  rpc BuyTicket(BuyTicketRequest) returns (BuyTicketResponse);
-}
-
 message BuyTicketRequest {
-  int64 user_id = 1;        // ID пользователя
-  int64 lottery_id = 2;     // ID лотереи
-  repeated int32 numbers = 3;  // 5 чисел, которые пользователь вводит
+  int64 user_id = 1; 
+  int64 lottery_id = 2; 
+  repeated int32 numbers = 3; 
 }
 
 message BuyTicketResponse {
   bool success = 1;
   string message = 2;
-  int64 ticket_id = 3;      // ID для билета
-  int64 user_id = 4;        // ID пользователя, который купил билет
-  int64 lottery_id = 5;     // ID лотереи, для которой куплен билет
-  repeated int32 numbers = 6;  // Числа, которые были выбраны пользователем
+  int64 ticket_id = 3;  
+  int64 user_id = 4;     
+  int64 lottery_id = 5;   
+  repeated int32 numbers = 6; 
+}
+
+message ListTicketsByUserRequest {
+  int64 user_id = 1;
+}
+
+message Ticket {
+  int64 ticket_id = 1;
+  int64 user_id = 2;
+  int64 lottery_id = 3;
+  repeated int32 numbers = 4;
+}
+
+message ListTicketsByUserResponse {
+  repeated Ticket tickets = 1;
+}
+
+message UpdatePurchaseRequest {
+  int64 purchase_id = 1;
+  int64 user_id = 2;
+  repeated int32 new_numbers = 3;
+}
+
+message UpdatePurchaseResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message DeletePurchaseRequest {
+  int64 purchase_id = 1;
+  int64 user_id = 2;
+}
+
+message DeletePurchaseResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+service PurchaseService {
+  rpc BuyTicket(BuyTicketRequest) returns (BuyTicketResponse);
+  rpc ListTicketsByUser(ListTicketsByUserRequest) returns (ListTicketsByUserResponse);
+  rpc UpdatePurchase(UpdatePurchaseRequest) returns (UpdatePurchaseResponse);
+  rpc DeletePurchase(DeletePurchaseRequest) returns (DeletePurchaseResponse);
 }

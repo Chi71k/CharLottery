@@ -23,9 +23,9 @@ const (
 
 type BuyTicketRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`          // ID пользователя
-	LotteryId     int64                  `protobuf:"varint,2,opt,name=lottery_id,json=lotteryId,proto3" json:"lottery_id,omitempty"` // ID лотереи
-	Numbers       []int32                `protobuf:"varint,3,rep,packed,name=numbers,proto3" json:"numbers,omitempty"`               // 5 чисел, которые пользователь вводит
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	LotteryId     int64                  `protobuf:"varint,2,opt,name=lottery_id,json=lotteryId,proto3" json:"lottery_id,omitempty"`
+	Numbers       []int32                `protobuf:"varint,3,rep,packed,name=numbers,proto3" json:"numbers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -85,10 +85,10 @@ type BuyTicketResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
-	TicketId      int64                  `protobuf:"varint,3,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`    // ID для билета
-	UserId        int64                  `protobuf:"varint,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`          // ID пользователя, который купил билет
-	LotteryId     int64                  `protobuf:"varint,5,opt,name=lottery_id,json=lotteryId,proto3" json:"lottery_id,omitempty"` // ID лотереи, для которой куплен билет
-	Numbers       []int32                `protobuf:"varint,6,rep,packed,name=numbers,proto3" json:"numbers,omitempty"`               // Числа, которые были выбраны пользователем
+	TicketId      int64                  `protobuf:"varint,3,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
+	UserId        int64                  `protobuf:"varint,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	LotteryId     int64                  `protobuf:"varint,5,opt,name=lottery_id,json=lotteryId,proto3" json:"lottery_id,omitempty"`
+	Numbers       []int32                `protobuf:"varint,6,rep,packed,name=numbers,proto3" json:"numbers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -165,6 +165,378 @@ func (x *BuyTicketResponse) GetNumbers() []int32 {
 	return nil
 }
 
+type ListTicketsByUserRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListTicketsByUserRequest) Reset() {
+	*x = ListTicketsByUserRequest{}
+	mi := &file_purchase_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListTicketsByUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListTicketsByUserRequest) ProtoMessage() {}
+
+func (x *ListTicketsByUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_purchase_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListTicketsByUserRequest.ProtoReflect.Descriptor instead.
+func (*ListTicketsByUserRequest) Descriptor() ([]byte, []int) {
+	return file_purchase_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ListTicketsByUserRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+type Ticket struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TicketId      int64                  `protobuf:"varint,1,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
+	UserId        int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	LotteryId     int64                  `protobuf:"varint,3,opt,name=lottery_id,json=lotteryId,proto3" json:"lottery_id,omitempty"`
+	Numbers       []int32                `protobuf:"varint,4,rep,packed,name=numbers,proto3" json:"numbers,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Ticket) Reset() {
+	*x = Ticket{}
+	mi := &file_purchase_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Ticket) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Ticket) ProtoMessage() {}
+
+func (x *Ticket) ProtoReflect() protoreflect.Message {
+	mi := &file_purchase_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Ticket.ProtoReflect.Descriptor instead.
+func (*Ticket) Descriptor() ([]byte, []int) {
+	return file_purchase_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Ticket) GetTicketId() int64 {
+	if x != nil {
+		return x.TicketId
+	}
+	return 0
+}
+
+func (x *Ticket) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *Ticket) GetLotteryId() int64 {
+	if x != nil {
+		return x.LotteryId
+	}
+	return 0
+}
+
+func (x *Ticket) GetNumbers() []int32 {
+	if x != nil {
+		return x.Numbers
+	}
+	return nil
+}
+
+type ListTicketsByUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Tickets       []*Ticket              `protobuf:"bytes,1,rep,name=tickets,proto3" json:"tickets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListTicketsByUserResponse) Reset() {
+	*x = ListTicketsByUserResponse{}
+	mi := &file_purchase_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListTicketsByUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListTicketsByUserResponse) ProtoMessage() {}
+
+func (x *ListTicketsByUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_purchase_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListTicketsByUserResponse.ProtoReflect.Descriptor instead.
+func (*ListTicketsByUserResponse) Descriptor() ([]byte, []int) {
+	return file_purchase_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ListTicketsByUserResponse) GetTickets() []*Ticket {
+	if x != nil {
+		return x.Tickets
+	}
+	return nil
+}
+
+type UpdatePurchaseRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PurchaseId    int64                  `protobuf:"varint,1,opt,name=purchase_id,json=purchaseId,proto3" json:"purchase_id,omitempty"`
+	UserId        int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	NewNumbers    []int32                `protobuf:"varint,3,rep,packed,name=new_numbers,json=newNumbers,proto3" json:"new_numbers,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdatePurchaseRequest) Reset() {
+	*x = UpdatePurchaseRequest{}
+	mi := &file_purchase_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdatePurchaseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdatePurchaseRequest) ProtoMessage() {}
+
+func (x *UpdatePurchaseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_purchase_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdatePurchaseRequest.ProtoReflect.Descriptor instead.
+func (*UpdatePurchaseRequest) Descriptor() ([]byte, []int) {
+	return file_purchase_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *UpdatePurchaseRequest) GetPurchaseId() int64 {
+	if x != nil {
+		return x.PurchaseId
+	}
+	return 0
+}
+
+func (x *UpdatePurchaseRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *UpdatePurchaseRequest) GetNewNumbers() []int32 {
+	if x != nil {
+		return x.NewNumbers
+	}
+	return nil
+}
+
+type UpdatePurchaseResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdatePurchaseResponse) Reset() {
+	*x = UpdatePurchaseResponse{}
+	mi := &file_purchase_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdatePurchaseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdatePurchaseResponse) ProtoMessage() {}
+
+func (x *UpdatePurchaseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_purchase_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdatePurchaseResponse.ProtoReflect.Descriptor instead.
+func (*UpdatePurchaseResponse) Descriptor() ([]byte, []int) {
+	return file_purchase_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UpdatePurchaseResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpdatePurchaseResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+type DeletePurchaseRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PurchaseId    int64                  `protobuf:"varint,1,opt,name=purchase_id,json=purchaseId,proto3" json:"purchase_id,omitempty"`
+	UserId        int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletePurchaseRequest) Reset() {
+	*x = DeletePurchaseRequest{}
+	mi := &file_purchase_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletePurchaseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletePurchaseRequest) ProtoMessage() {}
+
+func (x *DeletePurchaseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_purchase_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletePurchaseRequest.ProtoReflect.Descriptor instead.
+func (*DeletePurchaseRequest) Descriptor() ([]byte, []int) {
+	return file_purchase_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *DeletePurchaseRequest) GetPurchaseId() int64 {
+	if x != nil {
+		return x.PurchaseId
+	}
+	return 0
+}
+
+func (x *DeletePurchaseRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+type DeletePurchaseResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletePurchaseResponse) Reset() {
+	*x = DeletePurchaseResponse{}
+	mi := &file_purchase_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletePurchaseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletePurchaseResponse) ProtoMessage() {}
+
+func (x *DeletePurchaseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_purchase_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletePurchaseResponse.ProtoReflect.Descriptor instead.
+func (*DeletePurchaseResponse) Descriptor() ([]byte, []int) {
+	return file_purchase_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *DeletePurchaseResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DeletePurchaseResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_purchase_proto protoreflect.FileDescriptor
 
 const file_purchase_proto_rawDesc = "" +
@@ -183,9 +555,38 @@ const file_purchase_proto_rawDesc = "" +
 	"\auser_id\x18\x04 \x01(\x03R\x06userId\x12\x1d\n" +
 	"\n" +
 	"lottery_id\x18\x05 \x01(\x03R\tlotteryId\x12\x18\n" +
-	"\anumbers\x18\x06 \x03(\x05R\anumbers2[\n" +
+	"\anumbers\x18\x06 \x03(\x05R\anumbers\"3\n" +
+	"\x18ListTicketsByUserRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\x03R\x06userId\"w\n" +
+	"\x06Ticket\x12\x1b\n" +
+	"\tticket_id\x18\x01 \x01(\x03R\bticketId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x1d\n" +
+	"\n" +
+	"lottery_id\x18\x03 \x01(\x03R\tlotteryId\x12\x18\n" +
+	"\anumbers\x18\x04 \x03(\x05R\anumbers\"I\n" +
+	"\x19ListTicketsByUserResponse\x12,\n" +
+	"\atickets\x18\x01 \x03(\v2\x12.purchasepb.TicketR\atickets\"r\n" +
+	"\x15UpdatePurchaseRequest\x12\x1f\n" +
+	"\vpurchase_id\x18\x01 \x01(\x03R\n" +
+	"purchaseId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x1f\n" +
+	"\vnew_numbers\x18\x03 \x03(\x05R\n" +
+	"newNumbers\"L\n" +
+	"\x16UpdatePurchaseResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"Q\n" +
+	"\x15DeletePurchaseRequest\x12\x1f\n" +
+	"\vpurchase_id\x18\x01 \x01(\x03R\n" +
+	"purchaseId\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\x03R\x06userId\"L\n" +
+	"\x16DeletePurchaseResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage2\xef\x02\n" +
 	"\x0fPurchaseService\x12H\n" +
-	"\tBuyTicket\x12\x1c.purchasepb.BuyTicketRequest\x1a\x1d.purchasepb.BuyTicketResponseB4Z2github.com/CharLottery/proto/purchasepb;purchasepbb\x06proto3"
+	"\tBuyTicket\x12\x1c.purchasepb.BuyTicketRequest\x1a\x1d.purchasepb.BuyTicketResponse\x12`\n" +
+	"\x11ListTicketsByUser\x12$.purchasepb.ListTicketsByUserRequest\x1a%.purchasepb.ListTicketsByUserResponse\x12W\n" +
+	"\x0eUpdatePurchase\x12!.purchasepb.UpdatePurchaseRequest\x1a\".purchasepb.UpdatePurchaseResponse\x12W\n" +
+	"\x0eDeletePurchase\x12!.purchasepb.DeletePurchaseRequest\x1a\".purchasepb.DeletePurchaseResponseB4Z2github.com/CharLottery/proto/purchasepb;purchasepbb\x06proto3"
 
 var (
 	file_purchase_proto_rawDescOnce sync.Once
@@ -199,19 +600,33 @@ func file_purchase_proto_rawDescGZIP() []byte {
 	return file_purchase_proto_rawDescData
 }
 
-var file_purchase_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_purchase_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_purchase_proto_goTypes = []any{
-	(*BuyTicketRequest)(nil),  // 0: purchasepb.BuyTicketRequest
-	(*BuyTicketResponse)(nil), // 1: purchasepb.BuyTicketResponse
+	(*BuyTicketRequest)(nil),          // 0: purchasepb.BuyTicketRequest
+	(*BuyTicketResponse)(nil),         // 1: purchasepb.BuyTicketResponse
+	(*ListTicketsByUserRequest)(nil),  // 2: purchasepb.ListTicketsByUserRequest
+	(*Ticket)(nil),                    // 3: purchasepb.Ticket
+	(*ListTicketsByUserResponse)(nil), // 4: purchasepb.ListTicketsByUserResponse
+	(*UpdatePurchaseRequest)(nil),     // 5: purchasepb.UpdatePurchaseRequest
+	(*UpdatePurchaseResponse)(nil),    // 6: purchasepb.UpdatePurchaseResponse
+	(*DeletePurchaseRequest)(nil),     // 7: purchasepb.DeletePurchaseRequest
+	(*DeletePurchaseResponse)(nil),    // 8: purchasepb.DeletePurchaseResponse
 }
 var file_purchase_proto_depIdxs = []int32{
-	0, // 0: purchasepb.PurchaseService.BuyTicket:input_type -> purchasepb.BuyTicketRequest
-	1, // 1: purchasepb.PurchaseService.BuyTicket:output_type -> purchasepb.BuyTicketResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	3, // 0: purchasepb.ListTicketsByUserResponse.tickets:type_name -> purchasepb.Ticket
+	0, // 1: purchasepb.PurchaseService.BuyTicket:input_type -> purchasepb.BuyTicketRequest
+	2, // 2: purchasepb.PurchaseService.ListTicketsByUser:input_type -> purchasepb.ListTicketsByUserRequest
+	5, // 3: purchasepb.PurchaseService.UpdatePurchase:input_type -> purchasepb.UpdatePurchaseRequest
+	7, // 4: purchasepb.PurchaseService.DeletePurchase:input_type -> purchasepb.DeletePurchaseRequest
+	1, // 5: purchasepb.PurchaseService.BuyTicket:output_type -> purchasepb.BuyTicketResponse
+	4, // 6: purchasepb.PurchaseService.ListTicketsByUser:output_type -> purchasepb.ListTicketsByUserResponse
+	6, // 7: purchasepb.PurchaseService.UpdatePurchase:output_type -> purchasepb.UpdatePurchaseResponse
+	8, // 8: purchasepb.PurchaseService.DeletePurchase:output_type -> purchasepb.DeletePurchaseResponse
+	5, // [5:9] is the sub-list for method output_type
+	1, // [1:5] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_purchase_proto_init() }
@@ -225,7 +640,7 @@ func file_purchase_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_purchase_proto_rawDesc), len(file_purchase_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
