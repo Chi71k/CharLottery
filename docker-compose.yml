@@ -1,0 +1,74 @@
+version: "3.8"
+
+services:
+
+  nats:
+    image: nats:2.10
+    container_name: nats
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+    networks:
+      - app-net
+
+  redis:
+    image: redis:7.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-net
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-net
+    restart: unless-stopped
+
+  user-service:
+    build:
+      context: ./user-service
+    container_name: user-service
+    ports:
+      - "50051:50051"
+    depends_on:
+      - mongo
+      - redis
+      - nats
+    networks:
+      - app-net
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - REDIS_ADDR=redis:6379
+      - NATS_URL=nats://nats:4222
+    restart: unless-stopped
+
+  card-service:
+    build:
+      context: ./card-service
+    container_name: card-service
+    ports:
+      - "50054:50052"
+    depends_on:
+      - mongo
+      - redis
+      - nats
+    networks:
+      - app-net
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+      - REDIS_ADDR=redis:6379
+      - NATS_URL=nats://nats:4222
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
+
+networks:
+  app-net:

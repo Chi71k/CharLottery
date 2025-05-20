@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package card_service;
+option go_package = "card-service/pkg/api";
+
+service CardService {
+  rpc CreateCard(CreateCardRequest) returns (CreateCardResponse);
+  rpc GetCard(GetCardRequest) returns (GetCardResponse);
+  rpc ListCards(ListCardsRequest) returns (ListCardsResponse);
+  rpc ChargeCard(ChargeCardRequest) returns (ChargeCardResponse);
+  rpc UpdateCard(UpdateCardRequest) returns (CardResponse);
+  rpc DeleteCard(DeleteCardRequest) returns (DeleteCardResponse);
+}
+
+message CreateCardRequest {
+  string card_number = 1;
+  string cardholder_name = 2;
+  string expiration_date = 3;
+  string cvv = 4;
+  string user_id = 5;
+  string card_type = 6;
+}
+
+message CreateCardResponse {
+  string card_id = 1;
+  string card_type = 2;
+  string message = 3;
+}
+
+message GetCardRequest {
+  string card_id = 1;
+}
+
+message GetCardResponse {
+  Card card = 1;
+}
+
+message ListCardsRequest {
+  string user_id = 1;
+}
+
+message ListCardsResponse {
+  repeated Card cards = 1;
+}
+
+message Card {
+  string card_id = 1;
+  string card_number = 2;
+  string cardholder_name = 3;
+  string expiration_date = 4;
+  string cvv = 5;
+  string user_id = 6;
+  string card_type = 7;
+}
+
+message ChargeCardRequest {
+  string card_id = 1;
+  double amount = 2;
+}
+
+message ChargeCardResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message UpdateCardRequest {
+  string card_id = 1;
+  string cardholder_name = 2;
+  string expiration_date = 3;
+  string card_type = 4;
+}
+
+message CardResponse {
+  Card card = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message DeleteCardRequest {
+  string card_id = 1;
+}
+
+message DeleteCardResponse {
+  bool success = 1;
+  string message = 2;
+}

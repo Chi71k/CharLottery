@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package user_service;
+option go_package = "user-service/pkg/api";
+
+service UserService {
+    rpc Register (RegisterRequest) returns (RegisterResponse);
+    rpc VerifyOTP (VerifyOTPRequest) returns (VerifyOTPResponse);
+    rpc Login (LoginRequest) returns (LoginResponse);
+    rpc ForgotPassword (ForgotPasswordRequest) returns (ForgotPasswordResponse);
+    rpc ResetPassword (ResetPasswordRequest) returns (ResetPasswordResponse);
+    rpc GetUser(GetUserRequest) returns (UserResponse);
+    rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
+    rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+    rpc ListUsers (ListUsersRequest) returns (ListUsersResponse);
+}
+
+message RegisterRequest {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+}
+
+message RegisterResponse {
+    string user_id = 1;
+    bool success = 2;
+    string message = 3;
+    int32 status_code = 4;
+}
+
+message VerifyOTPRequest {
+    string user_id = 1;
+    string otp = 2;
+}
+
+message VerifyOTPResponse {
+    bool success = 1;
+    string message = 2;
+    int32 status_code = 3;
+}
+
+message LoginRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string token = 1;
+    string user_id = 2;
+    bool success = 3;
+    string message = 4;
+    int32 status_code = 5;
+}
+
+message ForgotPasswordRequest {
+    string email = 1;
+}
+
+message ForgotPasswordResponse {
+    bool success = 1;
+    string message = 2;
+    int32 status_code = 3;
+}
+
+message ResetPasswordRequest {
+    string email = 1;
+    string otp = 2;
+    string new_password = 3;
+}
+
+message ResetPasswordResponse {
+    bool success = 1;
+    string message = 2;
+    int32 status_code = 3;
+}
+
+message GetUserRequest {
+    string user_id = 1;
+}
+
+message UserResponse {
+    User user = 1;
+    bool success = 2;
+    string message = 3;
+    int32 status_code = 4;
+}
+
+message UpdateUserRequest {
+    string user_id = 1;
+    string username = 2;
+    string email = 3;
+}
+
+message DeleteUserRequest {
+    string user_id = 1;
+}
+
+message DeleteUserResponse {
+    bool success = 1;
+    string message = 2;
+    int32 status_code = 3;
+}
+
+message ListUsersRequest {}
+
+message ListUsersResponse {
+    repeated User users = 1;
+    bool success = 2;
+    string message = 3;
+    int32 status_code = 4;
+}
+
+message User {
+    string user_id = 1;
+    string username = 2;
+    string email = 3;
+    bool verified = 4;
+}
