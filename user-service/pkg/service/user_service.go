@@ -12,26 +12,27 @@ import (
 	"user-service/pkg/otp"
 	"user-service/pkg/repository"
 
+	metrics "user-service/pkg/api"
+
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService struct {
-    Repo  repository.UserRepositoryInterface
-    otps  map[string]string
-    nats  natswrap.Publisher
-    cache cache.CacheInterface
+	Repo  repository.UserRepositoryInterface
+	otps  map[string]string
+	nats  natswrap.Publisher
+	cache cache.CacheInterface
 }
 
 func NewUserService(repo repository.UserRepositoryInterface, nats natswrap.Publisher, cache cache.CacheInterface) *UserService {
-    return &UserService{
-        Repo:  repo,
-        otps:  make(map[string]string),
-        nats:  nats,
-        cache: cache,
-    }
+	return &UserService{
+		Repo:  repo,
+		otps:  make(map[string]string),
+		nats:  nats,
+		cache: cache,
+	}
 }
-
 
 func (us *UserService) Register(username, password, email string) (string, error) {
 	log.Printf("➡️ Register called with: username=%s, email=%s", username, email)
@@ -63,6 +64,9 @@ func (us *UserService) Register(username, password, email string) (string, error
 	}
 
 	log.Printf("✅ Пользователь создан: %s (%s)", userID, email)
+
+	metrics.UserLoginTotal.WithLabelValues("register", "success").Inc()
+
 
 	otpToken := otp.GenerateUniqueOTP()
 	if err := mail.SendOTPEmail(email, otpToken); err != nil {
@@ -107,19 +111,24 @@ func (us *UserService) Login(email, password string) (*model.User, error) {
 	user, err := us.Repo.GetUserByEmail(email)
 	if err != nil {
 		log.Printf("❌ Пользователь не найден: %s", email)
+		metrics.UserLoginTotal.WithLabelValues("login", "failure").Inc()
 		return nil, fmt.Errorf("user not found")
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		log.Printf("❌ Неверный пароль для пользователя: %s", email)
+		metrics.UserLoginTotal.WithLabelValues("login", "failure").Inc()
 		return nil, fmt.Errorf("invalid credentials")
 	}
+
+	metrics.UserLoginTotal.WithLabelValues("login", "success").Inc()
 
 	log.Printf("✅ Вход выполнен: %s (%s)", user.ID, email)
 	us.nats.Publish("user.logged_in", []byte(fmt.Sprintf("User logged in: %s, Email: %s", user.Username, user.Email)))
 
 	return user, nil
 }
+
 
 func (us *UserService) ForgotPassword(email string) error {
 	log.Printf("➡️ ForgotPassword called for: %s", email)
@@ -211,8 +220,6 @@ func (us *UserService) GetUser(userID string) (*model.User, error) {
 
 	return user, nil
 }
-
-
 
 func (us *UserService) UpdateUser(userID, username, email string) error {
 	log.Printf("✏️ Обновление пользователя: ID=%s, username=%s, email=%s", userID, username, email)

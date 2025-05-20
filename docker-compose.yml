@@ -1,6 +1,19 @@
 version: "3.8"
 
 services:
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    container_name: prometheus
+    ports:
+      - "9099:9090"  # хост:контейнер
+    volumes:
+      - ./pkg/prometheus:/etc/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - app-net
+    depends_on:
+      - user-service
 
   nats:
     image: nats:2.10
@@ -37,6 +50,7 @@ services:
     container_name: user-service
     ports:
       - "50051:50051"
+      - "9090:9090"
     depends_on:
       - mongo
       - redis
@@ -67,8 +81,25 @@ services:
       - NATS_URL=nats://nats:4222
     restart: unless-stopped
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - app-net
+
 volumes:
+  grafana-storage:
   mongo-data:
 
 networks:
   app-net:
+    name: app-net
