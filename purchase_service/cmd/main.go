@@ -31,7 +31,6 @@ func main() {
 	rdb := config.InitRedis()
 	uc := usecase.NewPurchaseUsecase(repo, pub, db, rdb)
 
-	natsconsumer.SubscribeToLotteryCreated(nc, uc)
 
 	lis, err := net.Listen("tcp", ":50055")
 	if err != nil {

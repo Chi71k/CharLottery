@@ -5,7 +5,7 @@ package purchasepb;
 option go_package = "github.com/CharLottery/proto/purchasepb;purchasepb";
 
 message BuyTicketRequest {
-  int64 user_id = 1; 
+  string user_id = 1; 
   int64 lottery_id = 2; 
   repeated int32 numbers = 3; 
 }
@@ -14,18 +14,18 @@ message BuyTicketResponse {
   bool success = 1;
   string message = 2;
   int64 ticket_id = 3;  
-  int64 user_id = 4;     
+  string user_id = 4;     
   int64 lottery_id = 5;   
   repeated int32 numbers = 6; 
 }
 
 message ListTicketsByUserRequest {
-  int64 user_id = 1;
+  string user_id = 1;
 }
 
 message Ticket {
   int64 ticket_id = 1;
-  int64 user_id = 2;
+  string user_id = 2;
   int64 lottery_id = 3;
   repeated int32 numbers = 4;
 }
@@ -36,7 +36,7 @@ message ListTicketsByUserResponse {
 
 message UpdatePurchaseRequest {
   int64 purchase_id = 1;
-  int64 user_id = 2;
+  string user_id = 2;
   repeated int32 new_numbers = 3;
 }
 
@@ -47,7 +47,7 @@ message UpdatePurchaseResponse {
 
 message DeletePurchaseRequest {
   int64 purchase_id = 1;
-  int64 user_id = 2;
+  string user_id = 2;
 }
 
 message DeletePurchaseResponse {

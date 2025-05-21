@@ -37,7 +37,7 @@ func main() {
 	server := grpc.NewServer()
 	lotterypb.RegisterLotteryServiceServer(server, handler)
 
-	lis, err := net.Listen("tcp", ":50054")
+	lis, err := net.Listen("tcp", ":50056")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

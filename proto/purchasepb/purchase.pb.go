@@ -23,7 +23,7 @@ const (
 
 type BuyTicketRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	LotteryId     int64                  `protobuf:"varint,2,opt,name=lottery_id,json=lotteryId,proto3" json:"lottery_id,omitempty"`
 	Numbers       []int32                `protobuf:"varint,3,rep,packed,name=numbers,proto3" json:"numbers,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -60,11 +60,11 @@ func (*BuyTicketRequest) Descriptor() ([]byte, []int) {
 	return file_purchase_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *BuyTicketRequest) GetUserId() int64 {
+func (x *BuyTicketRequest) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
-	return 0
+	return ""
 }
 
 func (x *BuyTicketRequest) GetLotteryId() int64 {
@@ -86,7 +86,7 @@ type BuyTicketResponse struct {
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	TicketId      int64                  `protobuf:"varint,3,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
-	UserId        int64                  `protobuf:"varint,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,4,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	LotteryId     int64                  `protobuf:"varint,5,opt,name=lottery_id,json=lotteryId,proto3" json:"lottery_id,omitempty"`
 	Numbers       []int32                `protobuf:"varint,6,rep,packed,name=numbers,proto3" json:"numbers,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -144,11 +144,11 @@ func (x *BuyTicketResponse) GetTicketId() int64 {
 	return 0
 }
 
-func (x *BuyTicketResponse) GetUserId() int64 {
+func (x *BuyTicketResponse) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
-	return 0
+	return ""
 }
 
 func (x *BuyTicketResponse) GetLotteryId() int64 {
@@ -167,7 +167,7 @@ func (x *BuyTicketResponse) GetNumbers() []int32 {
 
 type ListTicketsByUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        int64                  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -202,17 +202,17 @@ func (*ListTicketsByUserRequest) Descriptor() ([]byte, []int) {
 	return file_purchase_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *ListTicketsByUserRequest) GetUserId() int64 {
+func (x *ListTicketsByUserRequest) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
-	return 0
+	return ""
 }
 
 type Ticket struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TicketId      int64                  `protobuf:"varint,1,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
-	UserId        int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	LotteryId     int64                  `protobuf:"varint,3,opt,name=lottery_id,json=lotteryId,proto3" json:"lottery_id,omitempty"`
 	Numbers       []int32                `protobuf:"varint,4,rep,packed,name=numbers,proto3" json:"numbers,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -256,11 +256,11 @@ func (x *Ticket) GetTicketId() int64 {
 	return 0
 }
 
-func (x *Ticket) GetUserId() int64 {
+func (x *Ticket) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
-	return 0
+	return ""
 }
 
 func (x *Ticket) GetLotteryId() int64 {
@@ -324,7 +324,7 @@ func (x *ListTicketsByUserResponse) GetTickets() []*Ticket {
 type UpdatePurchaseRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	PurchaseId    int64                  `protobuf:"varint,1,opt,name=purchase_id,json=purchaseId,proto3" json:"purchase_id,omitempty"`
-	UserId        int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	NewNumbers    []int32                `protobuf:"varint,3,rep,packed,name=new_numbers,json=newNumbers,proto3" json:"new_numbers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -367,11 +367,11 @@ func (x *UpdatePurchaseRequest) GetPurchaseId() int64 {
 	return 0
 }
 
-func (x *UpdatePurchaseRequest) GetUserId() int64 {
+func (x *UpdatePurchaseRequest) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
-	return 0
+	return ""
 }
 
 func (x *UpdatePurchaseRequest) GetNewNumbers() []int32 {
@@ -436,7 +436,7 @@ func (x *UpdatePurchaseResponse) GetMessage() string {
 type DeletePurchaseRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	PurchaseId    int64                  `protobuf:"varint,1,opt,name=purchase_id,json=purchaseId,proto3" json:"purchase_id,omitempty"`
-	UserId        int64                  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -478,11 +478,11 @@ func (x *DeletePurchaseRequest) GetPurchaseId() int64 {
 	return 0
 }
 
-func (x *DeletePurchaseRequest) GetUserId() int64 {
+func (x *DeletePurchaseRequest) GetUserId() string {
 	if x != nil {
 		return x.UserId
 	}
-	return 0
+	return ""
 }
 
 type DeletePurchaseResponse struct {
@@ -544,7 +544,7 @@ const file_purchase_proto_rawDesc = "" +
 	"\x0epurchase.proto\x12\n" +
 	"purchasepb\"d\n" +
 	"\x10BuyTicketRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\x12\x1d\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1d\n" +
 	"\n" +
 	"lottery_id\x18\x02 \x01(\x03R\tlotteryId\x12\x18\n" +
 	"\anumbers\x18\x03 \x03(\x05R\anumbers\"\xb6\x01\n" +
@@ -552,15 +552,15 @@ const file_purchase_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x1b\n" +
 	"\tticket_id\x18\x03 \x01(\x03R\bticketId\x12\x17\n" +
-	"\auser_id\x18\x04 \x01(\x03R\x06userId\x12\x1d\n" +
+	"\auser_id\x18\x04 \x01(\tR\x06userId\x12\x1d\n" +
 	"\n" +
 	"lottery_id\x18\x05 \x01(\x03R\tlotteryId\x12\x18\n" +
 	"\anumbers\x18\x06 \x03(\x05R\anumbers\"3\n" +
 	"\x18ListTicketsByUserRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\x03R\x06userId\"w\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"w\n" +
 	"\x06Ticket\x12\x1b\n" +
 	"\tticket_id\x18\x01 \x01(\x03R\bticketId\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x1d\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1d\n" +
 	"\n" +
 	"lottery_id\x18\x03 \x01(\x03R\tlotteryId\x12\x18\n" +
 	"\anumbers\x18\x04 \x03(\x05R\anumbers\"I\n" +
@@ -569,7 +569,7 @@ const file_purchase_proto_rawDesc = "" +
 	"\x15UpdatePurchaseRequest\x12\x1f\n" +
 	"\vpurchase_id\x18\x01 \x01(\x03R\n" +
 	"purchaseId\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\x03R\x06userId\x12\x1f\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1f\n" +
 	"\vnew_numbers\x18\x03 \x03(\x05R\n" +
 	"newNumbers\"L\n" +
 	"\x16UpdatePurchaseResponse\x12\x18\n" +
@@ -578,7 +578,7 @@ const file_purchase_proto_rawDesc = "" +
 	"\x15DeletePurchaseRequest\x12\x1f\n" +
 	"\vpurchase_id\x18\x01 \x01(\x03R\n" +
 	"purchaseId\x12\x17\n" +
-	"\auser_id\x18\x02 \x01(\x03R\x06userId\"L\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\"L\n" +
 	"\x16DeletePurchaseResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage2\xef\x02\n" +

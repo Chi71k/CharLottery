@@ -7,6 +7,7 @@ toolchain go1.23.8
 require (
 	github.com/CharLottery/proto v0.0.0
 	github.com/go-redis/redis/v8 v8.11.5
+	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/lib/pq v1.10.9
 	github.com/nats-io/nats.go v1.42.0
 	google.golang.org/grpc v1.72.0
