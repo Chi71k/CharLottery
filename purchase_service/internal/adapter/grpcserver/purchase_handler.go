@@ -2,6 +2,7 @@ package grpcserver
 
 import (
 	"context"
+	"fmt"
 
 	purchasepb "github.com/CharLottery/proto/purchasepb"
 	"github.com/CharLottery/purchase_service/internal/usecase"
@@ -19,6 +20,15 @@ func NewPurchaseHandler(uc *usecase.PurchaseUsecase) *PurchaseHandler {
 }
 
 func (h *PurchaseHandler) BuyTicket(ctx context.Context, req *purchasepb.BuyTicketRequest) (*purchasepb.BuyTicketResponse, error) {
+	userIDFromCtx, ok := ctx.Value("userID").(string)
+	if !ok || userIDFromCtx == "" {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+	reqUserID := fmt.Sprintf("%d", req.GetUserId())
+	if reqUserID != userIDFromCtx {
+		return nil, status.Error(codes.PermissionDenied, "user ID does not match authenticated user")
+	}
+
 	if req.GetUserId() == 0 || req.GetLotteryId() == 0 {
 		return nil, status.Error(codes.InvalidArgument, "user_id and lottery_id must be non-zero")
 	}
@@ -43,6 +53,15 @@ func (h *PurchaseHandler) BuyTicket(ctx context.Context, req *purchasepb.BuyTick
 }
 
 func (h *PurchaseHandler) ListTicketsByUser(ctx context.Context, req *purchasepb.ListTicketsByUserRequest) (*purchasepb.ListTicketsByUserResponse, error) {
+	userIDFromCtx, ok := ctx.Value("userID").(string)
+	if !ok || userIDFromCtx == "" {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+	reqUserID := fmt.Sprintf("%d", req.GetUserId())
+	if reqUserID != userIDFromCtx {
+		return nil, status.Error(codes.PermissionDenied, "user ID does not match authenticated user")
+	}
+
 	if req.GetUserId() == 0 {
 		return nil, status.Error(codes.InvalidArgument, "user_id must be non-zero")
 	}
@@ -66,6 +85,15 @@ func (h *PurchaseHandler) ListTicketsByUser(ctx context.Context, req *purchasepb
 }
 
 func (h *PurchaseHandler) UpdatePurchase(ctx context.Context, req *purchasepb.UpdatePurchaseRequest) (*purchasepb.UpdatePurchaseResponse, error) {
+	userIDFromCtx, ok := ctx.Value("userID").(string)
+	if !ok || userIDFromCtx == "" {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+	reqUserID := fmt.Sprintf("%d", req.GetUserId())
+	if reqUserID != userIDFromCtx {
+		return nil, status.Error(codes.PermissionDenied, "user ID does not match authenticated user")
+	}
+
 	if req.GetPurchaseId() == 0 || req.GetUserId() == 0 || len(req.GetNewNumbers()) != 5 {
 		return nil, status.Error(codes.InvalidArgument, "purchase_id, user_id and exactly 5 new numbers are required")
 	}
@@ -82,6 +110,15 @@ func (h *PurchaseHandler) UpdatePurchase(ctx context.Context, req *purchasepb.Up
 }
 
 func (h *PurchaseHandler) DeletePurchase(ctx context.Context, req *purchasepb.DeletePurchaseRequest) (*purchasepb.DeletePurchaseResponse, error) {
+	userIDFromCtx, ok := ctx.Value("userID").(string)
+	if !ok || userIDFromCtx == "" {
+		return nil, status.Error(codes.Unauthenticated, "user not authenticated")
+	}
+	reqUserID := fmt.Sprintf("%d", req.GetUserId())
+	if reqUserID != userIDFromCtx {
+		return nil, status.Error(codes.PermissionDenied, "user ID does not match authenticated user")
+	}
+
 	if req.GetPurchaseId() == 0 || req.GetUserId() == 0 {
 		return nil, status.Error(codes.InvalidArgument, "purchase_id and user_id are required")
 	}
